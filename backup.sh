@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Based on https://github.com/woxxy/MySQL-backup-to-Amazon-S3
 # Full backups every start of month and week. Differential backups the rest of days.
@@ -8,6 +8,7 @@
 # change these variables to what you need
 MYSQLROOT=${BACKUPUSER}
 MYSQLPASS=${BACKUPASS}
+MYSQLHOST=${MYSQLHOST}
 S3BUCKET=${S3BUCKET}
 #Path for full backup and differential backup. Must end with /
 BACKUP_PATH=/
@@ -66,7 +67,7 @@ if [ ${PERIOD} = "week" ] || [ ${PERIOD} = "month" ] ; then
 	BACKUP_DIRNAME=${BACKUP_DIRNAME}_full
 	rm -rf ${BACKUP_PATH}${BACKUP_DIRNAME}
 	# perform backup
-	${PERCONA_BACKUP_COMMAND} --user=${MYSQLROOT} --password=${MYSQLPASS} --no-timestamp ${BACKUP_PATH}${BACKUP_DIRNAME} --parallel=4 --use-memory=640M
+	${PERCONA_BACKUP_COMMAND} -host=${MYSQLHOST} --user=${MYSQLROOT} --password=${MYSQLPASS} --no-timestamp ${BACKUP_PATH}${BACKUP_DIRNAME} --parallel=4 --use-memory=640M
 	# apply logs
 	${PERCONA_BACKUP_COMMAND} --user=${MYSQLROOT} --password=${MYSQLPASS} --no-timestamp ${BACKUP_PATH}${BACKUP_DIRNAME} --parallel=4 --use-memory=640M --apply-log
 else

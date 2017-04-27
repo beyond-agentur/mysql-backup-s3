@@ -1,7 +1,7 @@
 FROM alpine:3.4
 
 RUN apk update
-RUN apk add python py-pip py-setuptools git ca-certificates xtrabackup
+RUN apk add python py-pip py-setuptools git ca-certificates perl xtrabackup
 RUN pip install python-dateutil
 
 RUN git clone https://github.com/s3tools/s3cmd.git /opt/s3cmd
